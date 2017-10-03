@@ -26,29 +26,42 @@ namespace Ink
         std::string buildrule;
     };
 
-    int MakeBuilder(Target);
-
-    enum class InputType {
-        All
-    };
+    int MakeBuilder(int argc, char** argv, Target t);
 }
 
 int main (int argc, char** argv)
 {
-    std::cout << "Hello" << std::endl;
-
-    Ink::Target maindep{
-        "out.run",
+    Ink::Target maindep {
+        "target/hello.run",
         {"test/hello.cpp"},
         "clang++ -Wall -Werror test/hello.cpp -o target/hello.run"
     }; 
     
-    return Ink::MakeBuilder(maindep);
+    return Ink::MakeBuilder(argc, argv, maindep);
 }
 
-int Ink::MakeBuilder(Ink::Target t)
+int Ink::MakeBuilder(int argc, char** argv, Ink::Target t)
 {
-    std::system(t.buildrule.c_str());
+    // for (int i = 0; i < argc; ++i)
+    // {
+    //     std::cout << "Input " << i << ": " << argv[i] << std::endl;
+    // }
+
+    if (argc > 1) 
+    {
+        if (argv[1] == std::string("clean"))
+        {
+            std::string fullcmd = "rm -f " + t.filename;
+            std::cout << fullcmd << std::endl;
+            std::system(fullcmd.c_str());
+        }
+    } 
+    else 
+    {
+        std::cout << t.buildrule << std::endl;
+        std::system(t.buildrule.c_str());
+    }
+    
     return 0;
 }
 
