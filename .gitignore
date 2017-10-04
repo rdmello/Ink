@@ -1,4 +1,5 @@
 
 *.xmind
 *.run
-
+*.exe
+*.obj

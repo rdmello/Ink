@@ -19,11 +19,24 @@
 
 namespace Ink
 {
+    /* Identifying Target files */
+    enum class IDType {FileName, FileNameMatcher, Label};
+
+    struct Identifier
+    {
+        IDType type;
+        std::string str;
+    };
+
+    Identifier File(std::string filename);
+    Identifier FileNameMatcher(std::string matchstring);
+    Identifier Label(std::string label);
+
     struct Target
     {
-        std::string filename;
-        std::vector<std::string> deplist;
-        std::string buildrule;
+        Identifier output; 
+        std::vector<Identifier> input;
+        std::string command;
     };
 
     int MakeBuilder(int argc, char** argv, Target t);
@@ -31,11 +44,17 @@ namespace Ink
 
 int main (int argc, char** argv)
 {
+    // Ink::Target maindep {
+    //     "target/hello.run",
+    //     {"test/hello.cpp"},
+    //     "clang++ -Wall -Werror test/hello.cpp -o target/hello.run"
+    // };
+
     Ink::Target maindep {
-        "target/hello.run",
-        {"test/hello.cpp"},
-        "clang++ -Wall -Werror test/hello.cpp -o target/hello.run"
-    }; 
+        {Ink::IDType::FileName, "target\\hello.run"},
+        {{Ink::IDType::FileName, "test\\hello.cpp"}},
+    };
+    maindep.command = "cl.exe /EHsc test\\hello.cpp";
     
     return Ink::MakeBuilder(argc, argv, maindep);
 }
@@ -51,15 +70,15 @@ int Ink::MakeBuilder(int argc, char** argv, Ink::Target t)
     {
         if (argv[1] == std::string("clean"))
         {
-            std::string fullcmd = "rm -f " + t.filename;
+            std::string fullcmd = "rm -f " + t.output.str;
             std::cout << fullcmd << std::endl;
             std::system(fullcmd.c_str());
         }
     } 
     else 
     {
-        std::cout << t.buildrule << std::endl;
-        std::system(t.buildrule.c_str());
+        std::cout << t.command << std::endl;
+        std::system(t.command.c_str());
     }
     
     return 0;
