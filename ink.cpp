@@ -19,24 +19,40 @@
 
 namespace Ink
 {
-    /* Identifying Target files */
-    enum class IDType {FileName, FileNameMatcher, Label};
+    /*
+     * Ink::Str is a cross-platform abstraction for strings
+     */
+    struct Str
+    {
+        std::string win64, win32, macOS, lnx32, lnx64;
+        Str(const std::string&);           // sets all platform strings
+        void setWin(const std::string&);    // sets win64 and win32
+        void setUnix(const std::string&);   // sets macOS, lnx32, and lnx64
+        void setLnx(const std::string&);    // sets lnx32 and lnx64
+    };
 
-    struct Identifier
+    /* 
+     * Identifying Target files 
+     */
+    enum class IDType {Str, FileName, FileNameMatcher, Label};
+
+    struct Node
     {
         IDType type;
         std::string str;
+        Node(const char *);
+        Node(const std::string&);
     };
 
-    Identifier File(std::string filename);
-    Identifier FileNameMatcher(std::string matchstring);
-    Identifier Label(std::string label);
+    Node File(std::string filename);
+    Node FileNameMatcher(std::string matchstring);
+    Node Label(std::string label);
 
     struct Target
     {
-        Identifier output; 
-        std::vector<Identifier> input;
-        std::string command;
+        Node output; 
+        std::vector<Node> input;
+        Str command;
     };
 
     int MakeBuilder(int argc, char** argv, Target t);
@@ -58,6 +74,31 @@ int main (int argc, char** argv)
     
     return Ink::MakeBuilder(argc, argv, maindep);
 }
+
+Ink::Str::Str(const std::string& s): win32{s}, win64{s}, macOS{s},
+lnx32{s}, lnx64{s} {};
+
+void Ink::Str::setWin(const std::string& s)
+{
+    this->win32 = s;
+    this->win64 = s;
+}
+
+void Ink::Str::setUnix(const std::string& s)
+{
+    this->macOS = s;
+    this->lnx32 = s;
+    this->lnx64 = s;
+}
+
+void Ink::Str::setLnx(const std::string& s)
+{
+    this->lnx32 = s;
+    this->lnx64 = s;
+}
+
+Ink::Node::Node(const char* c): type{IDType::Str}, str{c} {};
+Ink::Node::Node(const std::string& s): type{IDType::Str}, str{s} {};
 
 int Ink::MakeBuilder(int argc, char** argv, Ink::Target t)
 {
