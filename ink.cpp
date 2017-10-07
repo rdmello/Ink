@@ -24,12 +24,15 @@ namespace Ink
      */
     struct Str
     {
-        std::string win64, win32, macOS, lnx32, lnx64;
-        Str(const std::string&);           // sets all platform strings
+        std::string win32, win64, macOS, lnx32, lnx64;
+        Str(const std::string&);            // sets all platform strings
         void setWin(const std::string&);    // sets win64 and win32
         void setUnix(const std::string&);   // sets macOS, lnx32, and lnx64
         void setLnx(const std::string&);    // sets lnx32 and lnx64
     };
+
+    /* Cross-platform separator, changes to backslash on Windows */
+    std::string SEP = "/"; 
 
     /* 
      * Identifying Target files 
@@ -40,8 +43,6 @@ namespace Ink
     {
         IDType type;
         std::string str;
-        Node(const char *);
-        Node(const std::string&);
     };
 
     Node File(std::string filename);
@@ -60,20 +61,21 @@ namespace Ink
 
 int main (int argc, char** argv)
 {
-    // Ink::Target maindep {
-    //     "target/hello.run",
-    //     {"test/hello.cpp"},
-    //     "clang++ -Wall -Werror test/hello.cpp -o target/hello.run"
-    // };
+    Ink::Target maindep{{Ink::IDType::FileName, ""}, {{Ink::IDType::FileName, ""}}, std::string("")};
+    maindep.input.push_back(Ink::Node{Ink::IDType::FileName, "test" + Ink::SEP + "hello.cpp"});
+    maindep.output = Ink::Node{Ink::IDType::FileName, "target" + Ink::SEP + "hello.run"};
+    maindep.command.setUnix("clang++ -Wall -Werror -std=c++14 " + maindep.input[1].str + " -o " + maindep.output.str);
+    maindep.command.setWin("cl.exe /EHsc test" + Ink::SEP + "hello.cpp");
 
-    Ink::Target maindep {
-        {Ink::IDType::FileName, "target\\hello.run"},
-        {{Ink::IDType::FileName, "test\\hello.cpp"}},
-    };
-    maindep.command = "cl.exe /EHsc test\\hello.cpp";
-    
     return Ink::MakeBuilder(argc, argv, maindep);
 }
+
+/*
+ * Set the compiler-specific filename separator
+ */
+#ifdef _MSC_VER
+    Ink::SEP = "\\";
+#endif
 
 Ink::Str::Str(const std::string& s): win32{s}, win64{s}, macOS{s},
 lnx32{s}, lnx64{s} {};
@@ -97,9 +99,6 @@ void Ink::Str::setLnx(const std::string& s)
     this->lnx64 = s;
 }
 
-Ink::Node::Node(const char* c): type{IDType::Str}, str{c} {};
-Ink::Node::Node(const std::string& s): type{IDType::Str}, str{s} {};
-
 int Ink::MakeBuilder(int argc, char** argv, Ink::Target t)
 {
     // for (int i = 0; i < argc; ++i)
@@ -118,8 +117,8 @@ int Ink::MakeBuilder(int argc, char** argv, Ink::Target t)
     } 
     else 
     {
-        std::cout << t.command << std::endl;
-        std::system(t.command.c_str());
+        std::cout << t.command.macOS << std::endl;
+        std::system(t.command.macOS.c_str());
     }
     
     return 0;
