@@ -22,9 +22,9 @@ namespace Ink
      * call one of them at the start of your code!  *
      ************************************************/
 
-    enum class Platforms { Error, Windows, macOS, Linux };
-    enum class Compilers { Error, VS, Clang, GCC };
-    enum class Bitnesses { Error, b32, b64 };
+    enum class Platforms { Windows, macOS, Linux };
+    enum class Compilers { VS, Clang, GCC };
+    enum class Bitnesses { b32, b64 };
 
     struct Context
     {

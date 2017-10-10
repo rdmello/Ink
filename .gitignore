@@ -1,5 +1,6 @@
 
-*.xmind
 *.run
 *.exe
 *.obj
+*.xmind
+a.out
