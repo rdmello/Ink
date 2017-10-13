@@ -10,7 +10,7 @@
 
 namespace Ink
 {
-    constexpr Context GetContext()
+    constexpr Context GetCurrentContext()
     {
         return Ink::Context{
             Platforms::macOS,

@@ -17,9 +17,6 @@ namespace Ink
 {
     /************************************************
      * INK PLATFORM, PATH, AND FILENAME UTILITIES   * 
-     * most of these variables are set using        *
-     * Ink::Init or Ink::ParseArgs, so remember to  *  
-     * call one of them at the start of your code!  *
      ************************************************/
 
     enum class Platforms { Windows, macOS, Linux };
@@ -34,7 +31,7 @@ namespace Ink
         char Separator;
     };
 
-    constexpr Context GetContext();
+    constexpr Context GetCurrentContext();
 
     /* 
      * Merge individual filenames into a space-separated,
