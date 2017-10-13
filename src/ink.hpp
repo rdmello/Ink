@@ -24,14 +24,14 @@ namespace Ink
 
     enum class Platforms { Unknown, Windows, macOS, Linux };
     enum class Compilers { Unknown, VS, Clang, GCC };
-    enum class Bitnesses { Unknown, b32, b64 };
+    enum class Architectures { Unknown, x86, AMD64 };
     enum class Separators : char { Unknown, Slash = '/', BackSlash = '\\' };
 
     struct Context
     {
-        Platforms  Platform;
-        Compilers  Compiler;
-        Bitnesses  Bitness;
+        Platforms Platform;
+        Compilers Compiler;
+        Architectures Architecture;
         Separators Separator;
     };
 

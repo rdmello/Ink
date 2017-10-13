@@ -14,8 +14,8 @@ TEST_CASE("Check zero-initialized values", "[Ink::Platform]") {
 
     REQUIRE(c.Platform == Ink::Platforms::Unknown);
     REQUIRE(c.Compiler == Ink::Compilers::Unknown);
-    REQUIRE(c.Bitness  == Ink::Bitnesses::Unknown);
-    REQUIRE(c.Separator  == Ink::Separators::Unknown);
+    REQUIRE(c.Architecture == Ink::Architectures::Unknown);
+    REQUIRE(c.Separator == Ink::Separators::Unknown);
 }
 
 
@@ -23,7 +23,9 @@ TEST_CASE("Verify that correct platform is detected", "[Ink::Platform]") {
 
     Ink::Context c = Ink::GetCurrentContext();
 
-    
-
+    REQUIRE(c.Platform == Ink::Platforms::macOS);
+    REQUIRE(c.Compiler == Ink::Compilers::Clang);
+    REQUIRE(c.Architecture == Ink::Architectures::AMD64);
+    REQUIRE(static_cast<char>(c.Separator) == '/');
 }
 
