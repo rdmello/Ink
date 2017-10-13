@@ -1,5 +1,5 @@
 
-#include "ink_pre.hpp"
+#include "ink.hpp"
 
 #include "catch.hpp"
 

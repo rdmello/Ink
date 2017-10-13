@@ -1,9 +1,9 @@
 
-#include "ink_pre.hpp"
+#include "ink.hpp"
 
 #include "catch.hpp"
 
-TEST_CASE("Check default values", "[Ink::Platform]") {
+TEST_CASE("Check zero-initialized values", "[Ink::Platform]") {
 
     // zero-initialize the object (do not default-initialize)
     Ink::Context c{};

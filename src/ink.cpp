@@ -4,7 +4,7 @@
 /* for 'system()' */
 #include <cstdlib>
 
-#include "ink_pre.hpp"
+#include "ink.hpp"
 
 namespace Ink
 {
