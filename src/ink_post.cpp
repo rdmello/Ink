@@ -4,13 +4,11 @@
 /* for 'system()' */
 #include <cstdlib>
 
-#ifndef INK_PRE_DEFINE
 #include "ink_pre.hpp"
-#endif
 
 namespace Ink
 {
-    constexpr Context GetCurrentContext()
+    Context GetCurrentContext()
     {
         return Ink::Context{
             Platforms::macOS,
@@ -18,9 +16,9 @@ namespace Ink
             Bitnesses::b64,
             // set separator 
 #ifdef _MSC_VER
-            '\\'
+            Separators::BackSlash
 #else
-            '/'
+            Separators::Slash
 #endif
         };
     }
@@ -74,7 +72,5 @@ namespace Ink
         
         return 0;
     }
-
-
 
 }

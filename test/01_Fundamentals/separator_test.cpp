@@ -1,9 +1,9 @@
 
-#include <iostream>
-
-#include "../src/ink_pre.hpp"
+#include "ink_pre.hpp"
 
 #include "catch.hpp"
+
+#include <iostream>
 
 TEST_CASE("Verify that separator is correct", "[Ink::SEP]") {
 
@@ -21,10 +21,10 @@ TEST_CASE("Verify that separator is correct", "[Ink::SEP]") {
     std::string sep("/");
     #endif
 
-    REQUIRE(&c.Separator == sep);
+    std::string out(1, static_cast<char>(c.Separator));
+
+    REQUIRE(out == sep);
 
     // make sure it is easy to use with std::string
-    REQUIRE(prefix + &c.Separator + suffix == prefix + sep + suffix);
+    REQUIRE(prefix + out + suffix == prefix + sep + suffix);
 }
-
-#include "../src/ink_post.hpp"

@@ -13,25 +13,29 @@
 #include <string>
 #include <vector>
 
+#ifndef INK_PRE_HEADER
+#define INK_PRE_HEADER
+
 namespace Ink
 {
     /************************************************
      * INK PLATFORM, PATH, AND FILENAME UTILITIES   * 
      ************************************************/
 
-    enum class Platforms { Windows, macOS, Linux };
-    enum class Compilers { VS, Clang, GCC };
-    enum class Bitnesses { b32, b64 };
+    enum class Platforms { Unknown, Windows, macOS, Linux };
+    enum class Compilers { Unknown, VS, Clang, GCC };
+    enum class Bitnesses { Unknown, b32, b64 };
+    enum class Separators : char { Unknown, Slash = '/', BackSlash = '\\' };
 
     struct Context
     {
-        Platforms Platform;
-        Compilers Compiler;
-        Bitnesses Bitness;
-        char Separator;
+        Platforms  Platform;
+        Compilers  Compiler;
+        Bitnesses  Bitness;
+        Separators Separator;
     };
 
-    constexpr Context GetCurrentContext();
+    Context GetCurrentContext();
 
     /* 
      * Merge individual filenames into a space-separated,
@@ -78,3 +82,5 @@ namespace Ink
 
     #define INK_PRE_DEFINE
 }
+
+#endif /* INK_PRE_HEADER */
