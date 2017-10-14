@@ -33,7 +33,7 @@ namespace Ink
     Separators GetSeparator();
 
     /************************************************
-     * BUILD NODES AND DEPENDENCY HIERARCY FCNS     * 
+     * BUILD NODES AND DEPENDENCY HIERARCHY FCNS     * 
      ************************************************/
 
     /*
@@ -52,22 +52,29 @@ namespace Ink
      * example: Ink::Node mybuild("helloworld.run");
      *          mybuild.inputs.push_back(Ink::Node("helloworld.cpp"));
      *          mybuild.command = "gcc " + mybuild.inputs[0] + " -o " + mybuild.output;
+     *          Ink::Build(mybuild);
      */
 
     struct Node
     {
         std::vector<std::string> outputs; 
-        std::vector<Node> inputs;
+        std::vector<Node>        inputs;
         std::vector<std::string> commands;
         Node();
         Node(const std::string& outfilename);
         Node(const char* outfilename);
+        // std::string printInputs(std::string delimiter = " ");
+        // std::string printOutputs(std::string delimiter = " ");
+        // std::string printCommands(std::string delimiter = " ");
     };
     
-    std::vector<Node> FileNameMatcher(std::string matchstring);
-    Node Label(std::string label);
+    std::vector<Node> FileNameMatcher(const std::string& matchstring);
 
-    int MakeBuilder(int argc, char** argv, Node t);
+    /************************************************
+     * BUILD GENERATORS                             * 
+     ************************************************/
+    enum class Result { Failure, Success };
+    Result Build(const Node&);
 }
 
 #endif /* INK_PRE_HEADER */
