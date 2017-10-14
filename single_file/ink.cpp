@@ -63,7 +63,7 @@ namespace Ink
         Node();
         Node(const std::string& outfilename);
         Node(const char* outfilename);
-        std::string printInputs(const std::string& delimiter = " ");
+        // std::string printInputs(std::string delimiter = " ");
         // std::string printOutputs(std::string delimiter = " ");
         // std::string printCommands(std::string delimiter = " ");
     };
@@ -81,29 +81,19 @@ namespace Ink
 
 int main (int argc, char** argv)
 {
-    Ink::Node tests("target/test.run");
-    tests.inputs.push_back("src/ink.cpp");
-    tests.inputs.push_back("test/01_Fundamentals/GetArchitecture_test.cpp");
-    tests.inputs.push_back("test/01_Fundamentals/GetCompiler_test.cpp");
-    tests.inputs.push_back("test/01_Fundamentals/GetPlatform_test.cpp");
-    tests.inputs.push_back("test/01_Fundamentals/GetSeparator_test.cpp");
-    tests.inputs.push_back("test/02_Build_Nodes/Node_test.cpp");
-    tests.inputs.push_back("test/02_Build_Nodes/Build_test.cpp");
-    tests.inputs.push_back("test/run_all_tests.cpp");
-
-    std::string incl1("src");
-    std::string incl2("test");
+    Ink::Node hello("hello.run");
+    hello.inputs.push_back("hello.cpp");
 
     if (Ink::GetPlatform() == Ink::Platforms::Windows) {
-        tests.commands.push_back( "cl.exe /EHsc " + tests.printInputs() );
+        hello.commands.push_back( "cl.exe /EHsc " + hello.inputs[0].outputs[0] );
     } else {
-        tests.commands.push_back( "g++ -Wall -Werror -std=c++11 "
-            + tests.printInputs() + " -I " + incl1 + " -I " + incl2
-            + " -o " + tests.outputs[0]
+        hello.commands.push_back( "g++ -Wall -Werror -std=c++11 "
+            + hello.inputs[0].outputs[0]
+            + " -o " + hello.outputs[0]
         );
     }
 
-    Ink::Build(tests);
+    Ink::Build(hello);
     return 0;
 }
 
@@ -171,20 +161,6 @@ namespace Ink
     outputs(),
     inputs(),
     commands() { outputs.push_back(std::string(outputFilename)); }
-    
-    std::string Node::printInputs(const std::string& delimiter)
-    {
-        std::string result("");
-        for (auto i = inputs.begin(); i < inputs.end() - 1; ++i)
-        {
-            result += (*i).outputs[0];
-            result += delimiter;
-        }
-        result += (*(inputs.end() - 1)).outputs[0];
-        return result;
-    }
-
-
 
     Result Build(const Ink::Node &root)
     {

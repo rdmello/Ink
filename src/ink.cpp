@@ -4,7 +4,9 @@
 /* for 'system()' */
 #include <cstdlib>
 
+#ifndef INK_PRE_HEADER
 #include "ink.hpp"
+#endif
 
 namespace Ink
 {
@@ -58,13 +60,25 @@ namespace Ink
 
     Node::Node() : outputs(), inputs(), commands(){};
 
-    Node::Node(const std::string &outputFilename) : 
+    Node::Node(const std::string &outputFilename) :
     outputs(), inputs(), commands() { outputs.push_back(outputFilename); }
 
-    Node::Node(const char *outputFilename) : 
-    outputs(), 
-    inputs(), 
+    Node::Node(const char *outputFilename) :
+    outputs(),
+    inputs(),
     commands() { outputs.push_back(std::string(outputFilename)); }
+
+    std::string Node::printInputs(const std::string& delimiter)
+    {
+        std::string result("");
+        for (auto i = inputs.begin(); i < inputs.end() - 1; ++i)
+        {
+            result += (*i).outputs[0];
+            result += delimiter;
+        }
+        result += (*(inputs.end() - 1)).outputs[0];
+        return result;
+    }
 
     Result Build(const Ink::Node &root)
     {
@@ -74,8 +88,7 @@ namespace Ink
         for (const Node &child : root.inputs)
         {
             Result res = Build(child);
-            if (res == Result::Failure)
-                    return Result::Failure;
+            if (res == Result::Failure) return Result::Failure;
         }
 
         /*

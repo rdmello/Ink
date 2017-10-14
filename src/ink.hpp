@@ -63,9 +63,9 @@ namespace Ink
         Node();
         Node(const std::string& outfilename);
         Node(const char* outfilename);
-        // std::string printInputs(std::string delimiter = " ");
-        // std::string printOutputs(std::string delimiter = " ");
-        // std::string printCommands(std::string delimiter = " ");
+        std::string printInputs(const std::string& delimiter = " ");
+        std::string printOutputs(const std::string& delimiter = " ");
+        std::string printCommands(const std::string& delimiter = " ");
     };
     
     std::vector<Node> FileNameMatcher(const std::string& matchstring);
