@@ -22,20 +22,15 @@ namespace Ink
      * PLATFORM, PATH, AND FILENAME UTILITIES       * 
      ************************************************/
 
-    enum class Platforms { Unknown, Windows, macOS, Linux };
-    enum class Compilers { Unknown, VS, Clang, GCC };
-    enum class Architectures { Unknown, x86, AMD64 };
-    enum class Separators : char { Unknown, Slash = '/', BackSlash = '\\' };
+    enum class Platforms { Undefined, Windows, macOS, Linux };
+    enum class Compilers { Undefined, VS, Clang, GCC };
+    enum class Architectures { Undefined, x86, AMD64 };
+    enum class Separators : char { Undefined, Slash = '/', BackSlash = '\\' };
 
-    struct Context
-    {
-        Platforms Platform;
-        Compilers Compiler;
-        Architectures Architecture;
-        Separators Separator;
-    };
-
-    Context GetCurrentContext();
+    Platforms GetPlatform();
+    Compilers GetCompiler();
+    Architectures GetArchitectures();
+    Separators GetSeparator();
 
     /************************************************
      * BUILD NODES AND DEPENDENCY HIERARCY FCNS     * 

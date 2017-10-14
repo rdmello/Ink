@@ -5,9 +5,15 @@
 
 #include <iostream>
 
+TEST_CASE("Zero-initialization separator test", "[Ink::SEP]") {
+
+    Ink::Separators c{};
+    REQUIRE(c == Ink::Separators::Undefined);
+}
+
 TEST_CASE("Verify that separator is correct", "[Ink::SEP]") {
 
-    Ink::Context c = Ink::GetCurrentContext();
+    Ink::Separators c = Ink::GetSeparator();
 
     // Verify that platform-specific separator is being
     // propagated correctly
@@ -21,7 +27,7 @@ TEST_CASE("Verify that separator is correct", "[Ink::SEP]") {
     std::string sep("/");
     #endif
 
-    std::string out(1, static_cast<char>(c.Separator));
+    std::string out(1, static_cast<char>(c));
 
     REQUIRE(out == sep);
 
