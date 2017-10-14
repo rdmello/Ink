@@ -50,18 +50,16 @@ Context GetCurrentContext()
     };
 }
 
+Node::Node(): outputs(), inputs(), commands() {};
+
+Node::Node(const std::string& outputFilename): 
+outputs(), inputs(), commands() { outputs.push_back(outputFilename); }
+
+Node::Node(const char* outputFilename): 
+outputs(), inputs(), commands() { outputs.push_back(std::string(outputFilename)); }
+
 int MakeBuilder(int argc, char **argv, Ink::Node t)
 {
-    if (argc > 1)
-    {
-        if (argv[1] == std::string("clean"))
-        {
-            std::string fullcmd = "rm -f " + t.output;
-            std::cout << fullcmd << std::endl;
-            std::system(fullcmd.c_str());
-        }
-    }
-
     return 0;
 }
 }

@@ -19,7 +19,7 @@
 namespace Ink
 {
     /************************************************
-     * INK PLATFORM, PATH, AND FILENAME UTILITIES   * 
+     * PLATFORM, PATH, AND FILENAME UTILITIES       * 
      ************************************************/
 
     enum class Platforms { Unknown, Windows, macOS, Linux };
@@ -38,23 +38,41 @@ namespace Ink
     Context GetCurrentContext();
 
     /************************************************
-     * INK BUILD NODES AND DEPENDENCY HIERARCY FCNS * 
+     * BUILD NODES AND DEPENDENCY HIERARCY FCNS     * 
      ************************************************/
+
+    /*
+     * Ink::Node represents a build step for a single file:
+     * - out:  output file name, 
+     *            if provided, the existence of this file will
+     *            be checked post-build
+     *            to verify that the build process has completed
+     *            successfully. 
+     *            If the output file is not generated, Ink will
+     *            error out
+     * - in:  dependencies for this build step
+     * - commands: actual build command executed using the std::system
+     *             function
+     * 
+     * example: Ink::Node mybuild("helloworld.run");
+     *          mybuild.inputs.push_back(Ink::Node("helloworld.cpp"));
+     *          mybuild.command = "gcc " + mybuild.inputs[0] + " -o " + mybuild.output;
+     */
 
     struct Node
     {
-        std::string output; 
+        std::vector<std::string> outputs; 
         std::vector<Node> inputs;
-        std::string command;
+        std::vector<std::string> commands;
+        Node();
+        Node(const std::string& outfilename);
+        Node(const char* outfilename);
     };
     
-    Node File(std::string filename);
     std::vector<Node> FileNameMatcher(std::string matchstring);
     Node Label(std::string label);
 
     int MakeBuilder(int argc, char** argv, Node t);
-
-    #define INK_PRE_DEFINE
 }
 
 #endif /* INK_PRE_HEADER */
