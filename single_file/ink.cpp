@@ -63,9 +63,9 @@ namespace Ink
         Node();
         Node(const std::string& outfilename);
         Node(const char* outfilename);
-        // std::string printInputs(std::string delimiter = " ");
-        // std::string printOutputs(std::string delimiter = " ");
-        // std::string printCommands(std::string delimiter = " ");
+        std::string printInputs(const std::string& delimiter = " ");
+        std::string printOutputs(const std::string& delimiter = " ");
+        std::string printCommands(const std::string& delimiter = " ");
     };
     
     std::vector<Node> FileNameMatcher(const std::string& matchstring);
@@ -101,6 +101,10 @@ int main (int argc, char** argv)
 
 /* for 'system()' */
 #include <cstdlib>
+
+#ifndef INK_PRE_HEADER
+#include "ink.hpp"
+#endif
 
 namespace Ink
 {
@@ -162,6 +166,18 @@ namespace Ink
     inputs(),
     commands() { outputs.push_back(std::string(outputFilename)); }
 
+    std::string Node::printInputs(const std::string& delimiter)
+    {
+        std::string result("");
+        for (auto i = inputs.begin(); i < inputs.end() - 1; ++i)
+        {
+            result += (*i).outputs[0];
+            result += delimiter;
+        }
+        result += (*(inputs.end() - 1)).outputs[0];
+        return result;
+    }
+
     Result Build(const Ink::Node &root)
     {
         /* 
@@ -189,3 +205,4 @@ namespace Ink
         return Result::Success;
     }
 }
+
